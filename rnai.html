@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RNAi Simulation – Nematode Control in Tobacco</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060d1a;color:#e2e8f0;font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+nav{position:fixed;top:0;width:100%;background:rgba(6,13,26,.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.07);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:60px;z-index:99}
+.logo{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:800;background:linear-gradient(90deg,#22c55e,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+nav a{color:#94a3b8;text-decoration:none;font-size:.85rem}nav a:hover{color:#22c55e}
+.hero{padding:100px 5% 60px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(34,197,94,.12) 0%,transparent 70%)}
+.badge{display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);padding:5px 16px;border-radius:20px;font-size:.78rem;color:#22c55e;margin-bottom:20px}
+.hero h1{font-family:'Outfit',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;background:linear-gradient(135deg,#fff 50%,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+.hero p{color:#94a3b8;max-width:650px;margin:0 auto;line-height:1.7;font-size:.95rem}
+.sim-section{padding:60px 5%}
+.steps-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.step-btn{padding:8px 18px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#94a3b8;font-size:.8rem;cursor:pointer;transition:.25s;font-weight:600}
+.step-btn.active,.step-btn:hover{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22c55e}
+.sim-card{background:#0d1628;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:40px;max-width:900px;margin:0 auto;min-height:420px}
+.sim-stage{position:relative;width:100%;height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+canvas{border-radius:12px;background:#0a1020}
+.sim-info{margin-top:28px;padding:20px;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.15);border-radius:12px}
+.sim-info h3{color:#22c55e;font-size:1rem;margin-bottom:8px}
+.sim-info p{color:#94a3b8;font-size:.85rem;line-height:1.7}
+.controls{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.btn{padding:10px 28px;border-radius:30px;border:none;cursor:pointer;font-size:.9rem;font-weight:600;transition:.25s}
+.btn-primary{background:linear-gradient(135deg,#22c55e,#06b6d4);color:#060d1a}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(34,197,94,.35)}
+.btn-outline{background:transparent;border:1px solid rgba(255,255,255,.15);color:#94a3b8}
+.btn-outline:hover{border-color:#22c55e;color:#22c55e}
+.step-indicator{text-align:center;font-size:.8rem;color:#475569;margin-bottom:16px}
+.ncert-box{max-width:900px;margin:40px auto 0;background:#0d1628;border:1px solid rgba(168,85,247,.2);border-radius:16px;padding:28px}
+.ncert-box h3{color:#a855f7;margin-bottom:14px;font-size:1rem}
+.ncert-box p{color:#94a3b8;font-size:.85rem;line-height:1.7}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;max-width:900px;margin:30px auto 0}
+.fact{background:#0d1628;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px}
+.fact h4{color:#06b6d4;font-size:.85rem;margin-bottom:6px}
+.fact p{color:#64748b;font-size:.78rem;line-height:1.5}
+footer{text-align:center;padding:30px;border-top:1px solid rgba(255,255,255,.06);color:#475569;font-size:.8rem;margin-top:40px}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">🧬 RNAi Simulator</div>
+  <a href="index.html">← Back to Biology Notes</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">🔬 Chapter 12 — Biotechnology &amp; Applications</div>
+  <h1>RNA Interference (RNAi)</h1>
+  <p>Interactive simulation of how RNAi-based GMO tobacco plants resist <em>Meloidogyne incognita</em> nematode attack through gene silencing.</p>
+</div>
+
+<div class="sim-section">
+  <div class="step-indicator" id="step-indicator">Step 1 of 6</div>
+  <div class="steps-nav" id="steps-nav"></div>
+
+  <div class="sim-card">
+    <div class="sim-stage">
+      <canvas id="sim-canvas" width="820" height="300"></canvas>
+    </div>
+    <div class="sim-info">
+      <h3 id="info-title">Loading…</h3>
+      <p id="info-text"></p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+    <button class="btn btn-primary" id="play-btn" onclick="togglePlay()">▶ Play Animation</button>
+    <button class="btn btn-outline" onclick="nextStep()">Next →</button>
+  </div>
+
+  <div class="ncert-box">
+    <h3>📖 NCERT Context</h3>
+    <p>In NCERT Class 12 Biology (Chapter 12), RNAi is described as a natural cellular defence mechanism. Scientists introduced <strong>nematode-specific genes</strong> into tobacco plants in a way that produces <strong>double-stranded RNA (dsRNA)</strong>. When <em>Meloidogyne incognita</em> nematodes feed on the transgenic tobacco roots, they ingest this dsRNA. Inside the nematode, the dsRNA triggers RNAi — silencing the nematode's own genes — causing <strong>death of the parasite</strong> and protecting the plant.</p>
+  </div>
+
+  <div class="fact-grid">
+    <div class="fact"><h4>🦠 The Pest</h4><p><em>Meloidogyne incognita</em> is a root-knot nematode that parasitises tobacco, causing severe crop loss.</p></div>
+    <div class="fact"><h4>✂️ Dicer Enzyme</h4><p>Cleaves dsRNA into 21–23 bp fragments called siRNA (small interfering RNA).</p></div>
+    <div class="fact"><h4>🔇 RISC Complex</h4><p>RNA-Induced Silencing Complex unwinds siRNA and uses it as a guide to find &amp; degrade complementary mRNA.</p></div>
+    <div class="fact"><h4>🌿 Result</h4><p>Nematode genes are silenced → parasite dies → tobacco plant survives without chemical pesticides.</p></div>
+    <div class="fact"><h4>🧪 dsRNA Source</h4><p>The dsRNA is produced from <em>both sense &amp; antisense</em> strands of the introduced nematode-specific gene.</p></div>
+    <div class="fact"><h4>🛡️ Why It's Safe</h4><p>The siRNA is highly specific — only targets nematode gene sequences, not plant or human genes.</p></div>
+  </div>
+</div>
+
+<footer>
+  <p>🌿 RNAi Simulation — NCERT Class 12 Biology | Chapter 12: Biotechnology &amp; Applications</p>
+</footer>
+
+<script>
+const steps = [
+  {
+    label:"Nematode Attack",
+    title:"Step 1: Nematode Attacks Tobacco Root",
+    text:"Meloidogyne incognita (root-knot nematode) penetrates tobacco plant roots and feeds on plant cells, withdrawing nutrients. This causes root galls, stunted growth, and severe yield loss.",
+    draw: drawStep1
+  },
+  {
+    label:"GMO Engineering",
+    title:"Step 2: Genetic Engineering of Tobacco",
+    text:"Scientists use Agrobacterium tumefaciens as a vector to introduce a nematode-specific gene into the tobacco genome. The gene is cloned in BOTH sense and antisense orientations using a palindromic promoter.",
+    draw: drawStep2
+  },
+  {
+    label:"dsRNA Production",
+    title:"Step 3: Plant Produces dsRNA",
+    text:"The transgenic tobacco transcribes both sense (+) and antisense (−) RNA strands. These complementary strands hybridise to form double-stranded RNA (dsRNA) specific to the nematode's vital gene.",
+    draw: drawStep3
+  },
+  {
+    label:"Nematode Ingests dsRNA",
+    title:"Step 4: Nematode Ingests dsRNA",
+    text:"When the nematode feeds on the transgenic tobacco root, it ingests the dsRNA along with plant cell contents. The dsRNA enters the nematode's gut cells and triggers the RNAi pathway.",
+    draw: drawStep4
+  },
+  {
+    label:"RISC & Silencing",
+    title:"Step 5: Dicer Cleaves dsRNA → RISC Silences mRNA",
+    text:"Inside the nematode: (1) Dicer enzyme cuts dsRNA into 21–23 bp siRNA fragments. (2) siRNA loads into RISC complex. (3) RISC unwinds siRNA, uses guide strand to find complementary mRNA. (4) Target mRNA is degraded — gene is SILENCED.",
+    draw: drawStep5
+  },
+  {
+    label:"Nematode Dies",
+    title:"Step 6: Nematode Dies — Tobacco Protected!",
+    text:"With vital genes silenced, the nematode cannot survive. It dies within the root tissue. The transgenic tobacco plant is now resistant to Meloidogyne incognita without any chemical pesticide — a safe, eco-friendly biotechnology solution.",
+    draw: drawStep6
+  }
+];
+
+let currentStep = 0;
+let animFrame = null;
+let playing = false;
+let tick = 0;
+const canvas = document.getElementById('sim-canvas');
+const ctx = canvas.getContext('2d');
+
+function buildNav(){
+  const nav = document.getElementById('steps-nav');
+  steps.forEach((s,i)=>{
+    const b = document.createElement('button');
+    b.className='step-btn'+(i===0?' active':'');
+    b.textContent=(i+1)+'. '+s.label;
+    b.onclick=()=>goTo(i);
+    b.id='sbtn-'+i;
+    nav.appendChild(b);
+  });
+}
+
+function goTo(i){
+  currentStep=i;
+  tick=0;
+  updateUI();
+}
+function prevStep(){if(currentStep>0)goTo(currentStep-1);}
+function nextStep(){if(currentStep<steps.length-1)goTo(currentStep+1);}
+
+function updateUI(){
+  const s=steps[currentStep];
+  document.getElementById('info-title').textContent=s.title;
+  document.getElementById('info-text').textContent=s.text;
+  document.getElementById('step-indicator').textContent='Step '+(currentStep+1)+' of '+steps.length;
+  document.querySelectorAll('.step-btn').forEach((b,i)=>b.classList.toggle('active',i===currentStep));
+  draw();
+}
+
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('play-btn').textContent=playing?'⏸ Pause':'▶ Play Animation';
+  if(playing) loop();
+  else if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
+}
+
+function loop(){
+  tick++;
+  draw();
+  if(playing) animFrame=requestAnimationFrame(loop);
+}
+
+function draw(){steps[currentStep].draw(ctx,canvas.width,canvas.height,tick);}
+
+function clr(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#0a1020';ctx.fillRect(0,0,canvas.width,canvas.height);}
+
+// Helpers
+function text(t,x,y,size,color,align='center'){ctx.save();ctx.font=`${size}px Inter`;ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(t,x,y);ctx.restore();}
+function circle(x,y,r,fill,stroke,sw=2){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=sw;ctx.stroke();}}
+function rect(x,y,w,h,fill,r=8){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();}
+function arrow(x1,y1,x2,y2,color){
+  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-10*Math.cos(a-0.4),y2-10*Math.sin(a-0.4));ctx.lineTo(x2-10*Math.cos(a+0.4),y2-10*Math.sin(a+0.4));ctx.closePath();ctx.fill();ctx.restore();
+}
+
+function drawStep1(c,W,H,t){
+  clr();
+  // Soil
+  rect(0,H*0.55,W,H*0.45,'#1a2b0a');
+  text('🌿 TOBACCO PLANT',W/2,40,13,'#22c55e');
+  // Root
+  ctx.save();ctx.strokeStyle='#4ade80';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(W/2,60);ctx.lineTo(W/2,H*0.7);ctx.stroke();ctx.restore();
+  // Nematode moving
+  const nx=W*0.55+Math.sin(t*0.04)*30;
+  const ny=H*0.62+Math.cos(t*0.03)*20;
+  ctx.save();ctx.translate(nx,ny);ctx.rotate(t*0.05);
+  ctx.beginPath();ctx.ellipse(0,0,22,8,0,0,Math.PI*2);ctx.fillStyle='#f97316';ctx.fill();
+  ctx.restore();
+  text('🔴 Meloidogyne incognita',nx+40,ny,'0.75rem','#f97316','left');
+  text('Root-knot nematode feeding on root',W/2,H-15,12,'#64748b');
+}
+
+function drawStep2(c,W,H,t){
+  clr();
+  // Agrobacterium
+  const ax=W*0.2+Math.sin(t*0.03)*8;
+  circle(ax,H/2,36,'#7c3aed','#a855f7',2);
+  text('Agrobacterium',ax,H/2-48,11,'#a855f7');
+  text('tumefaciens',ax,H/2-36,11,'#a855f7');
+  text('(Vector)',ax,H/2+52,11,'#64748b');
+  // Plasmid inside
+  ctx.save();ctx.translate(ax,H/2);ctx.rotate(t*0.02);
+  ctx.beginPath();ctx.ellipse(0,0,16,10,0,0,Math.PI*2);ctx.strokeStyle='#22c55e';ctx.lineWidth=2;ctx.stroke();
+  ctx.restore();
+  // Arrow
+  arrow(ax+50,H/2,W*0.55,H/2,'#a855f7');
+  text('Gene Transfer',W*0.5,H/2-18,11,'#94a3b8');
+  // Tobacco cell
+  rect(W*0.57,H/2-60,160,120,'rgba(34,197,94,.08)',12);
+  ctx.save();ctx.strokeStyle='#22c55e';ctx.lineWidth=1.5;ctx.strokeRect(W*0.57,H/2-60,160,120);ctx.restore();
+  text('Tobacco Cell',W*0.57+80,H/2-68,11,'#22c55e');
+  // DNA inside cell
+  ctx.save();ctx.strokeStyle='#06b6d4';ctx.lineWidth=2;
+  for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(W*0.57+40+i*26,H/2,10,0,Math.PI*2);ctx.stroke();}
+  ctx.restore();
+  text('Nematode-specific gene inserted',W/2,H-20,11,'#64748b');
+}
+
+function drawStep3(c,W,H,t){
+  clr();
+  // Cell boundary
+  rect(W*0.1,H*0.1,W*0.8,H*0.75,'rgba(34,197,94,.04)',16);
+  ctx.save();ctx.strokeStyle='rgba(34,197,94,.2)';ctx.lineWidth=1;ctx.strokeRect(W*0.1,H*0.1,W*0.8,H*0.75);ctx.restore();
+  text('TOBACCO CELL (Transgenic)',W/2,H*0.08,12,'#22c55e');
+  // Sense RNA
+  const sy=H*0.38;
+  ctx.save();ctx.strokeStyle='#22c55e';ctx.lineWidth=3;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(W*0.18,sy);ctx.lineTo(W*0.55+Math.sin(t*0.04)*10,sy);ctx.stroke();
+  ctx.restore();
+  text('(+) Sense RNA',W*0.36,sy-10,11,'#22c55e');
+  // Antisense RNA
+  const ay=H*0.55;
+  ctx.save();ctx.strokeStyle='#06b6d4';ctx.lineWidth=3;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(W*0.18,ay);ctx.lineTo(W*0.55+Math.cos(t*0.04)*10,ay);ctx.stroke();
+  ctx.restore();
+  text('(−) Antisense RNA',W*0.36,ay-10,11,'#06b6d4');
+  // dsRNA formed
+  const cx=W*0.72,cy=H*0.47;
+  rect(cx-50,cy-22,100,44,'rgba(239,68,68,.15)',8);
+  text('dsRNA',cx,cy-8,13,'#f87171');
+  text('(double-stranded)',cx,cy+8,10,'#ef4444');
+  arrow(W*0.58,H*0.38,cx-52,cy-5,'#94a3b8');
+  arrow(W*0.58,H*0.55,cx-52,cy+5,'#94a3b8');
+  text('Hybridisation',W*0.63,H*0.38,10,'#94a3b8');
+}
+
+function drawStep4(c,W,H,t){
+  clr();
+  // Root
+  ctx.save();ctx.strokeStyle='#4ade80';ctx.lineWidth=10;ctx.beginPath();ctx.moveTo(W/2,20);ctx.lineTo(W/2,H*0.85);ctx.stroke();ctx.restore();
+  text('Tobacco Root (with dsRNA)',W/2,15,11,'#22c55e');
+  // Nematode on root
+  const ny=H*0.5+Math.sin(t*0.03)*15;
+  ctx.save();ctx.translate(W/2+14,ny);
+  ctx.beginPath();ctx.ellipse(0,0,28,10,0,0,Math.PI*2);ctx.fillStyle='#f97316';ctx.fill();
+  ctx.restore();
+  // dsRNA arrow into nematode
+  const prog=Math.min(1,(t%80)/60);
+  const sx=W*0.65,ex=W/2+14;
+  rect(sx,ny-10,80,20,'rgba(239,68,68,.15)',6);
+  text('dsRNA',sx+40,ny+4,11,'#f87171');
+  if(prog>0){
+    arrow(sx,ny,ex+30,ny,'#f87171');
+  }
+  text('Nematode ingests dsRNA while feeding',W/2,H-15,11,'#64748b');
+}
+
+function drawStep5(c,W,H,t){
+  clr();
+  // Nematode cell outline
+  rect(W*0.05,H*0.08,W*0.9,H*0.78,'rgba(249,115,22,.04)',16);
+  ctx.save();ctx.strokeStyle='rgba(249,115,22,.2)';ctx.lineWidth=1;ctx.strokeRect(W*0.05,H*0.08,W*0.9,H*0.78);ctx.restore();
+  text('INSIDE NEMATODE CELL',W/2,H*0.06,12,'#f97316');
+  // dsRNA
+  rect(W*0.08,H*0.25,100,36,'rgba(239,68,68,.2)',8);
+  text('dsRNA',W*0.08+50,H*0.25+22,12,'#f87171');
+  // Dicer
+  circle(W*0.37,H*0.43,28,'rgba(168,85,247,.2)','#a855f7');
+  text('Dicer',W*0.37,H*0.43+4,11,'#a855f7');
+  arrow(W*0.08+100,H*0.43,W*0.37-28,H*0.43,'#94a3b8');
+  // siRNA
+  rect(W*0.52,H*0.25,100,36,'rgba(6,182,212,.2)',8);
+  text('siRNA',W*0.52+50,H*0.25+22,12,'#06b6d4');
+  arrow(W*0.37+28,H*0.36,W*0.52+50,H*0.28,'#a855f7');
+  // RISC
+  circle(W*0.7,H*0.43,30,'rgba(34,197,94,.2)','#22c55e');
+  text('RISC',W*0.7,H*0.43+4,11,'#22c55e');
+  arrow(W*0.52+100,H*0.43,W*0.7-30,H*0.43,'#06b6d4');
+  // mRNA cut
+  const mx=W*0.7,my=H*0.72;
+  ctx.save();ctx.strokeStyle='#ef4444';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(W*0.4,my);ctx.lineTo(W*0.88,my);ctx.stroke();
+  ctx.restore();
+  text('mRNA (degraded ✕)',W*0.64,my-8,11,'#ef4444');
+  arrow(mx,H*0.73,mx,my+2,'#22c55e');
+  text('Gene SILENCED',W*0.7,H*0.88,12,'#22c55e');
+}
+
+function drawStep6(c,W,H,t){
+  clr();
+  const glow=0.5+0.5*Math.sin(t*0.06);
+  // Plant
+  rect(W*0.55,H*0.05,W*0.4,H*0.88,'rgba(34,197,94,0.06)',16);
+  ctx.save();ctx.strokeStyle=`rgba(34,197,94,${0.2+glow*0.3})`;ctx.lineWidth=2;ctx.strokeRect(W*0.55,H*0.05,W*0.4,H*0.88);ctx.restore();
+  // Dead nematode
+  ctx.save();ctx.translate(W*0.3,H*0.5);ctx.rotate(0.4);ctx.globalAlpha=0.4;
+  ctx.beginPath();ctx.ellipse(0,0,28,9,0,0,Math.PI*2);ctx.fillStyle='#6b7280';ctx.fill();ctx.restore();
+  text('✕',W*0.3,H*0.5+4,20,'#ef4444','center');
+  text('Nematode DEAD',W*0.3,H*0.65,11,'#64748b');
+  // Protected plant
+  text('🌿',W*0.75,H*0.35,48,'#22c55e');
+  text('TOBACCO PLANT',W*0.75,H*0.6,14,'#22c55e');
+  text('PROTECTED ✓',W*0.75,H*0.72,16,`rgba(34,197,94,${0.6+glow*0.4})`);
+  text('No pesticides needed!',W*0.75,H*0.84,11,'#4ade80');
+  text('RNAi-based GMO Crop Success!',W/2,H-10,13,'#06b6d4');
+}
+
+buildNav();
+updateUI();
+</script>
+</body>
+</html>

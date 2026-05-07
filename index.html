@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 12 Biology – NCERT CBSE</title>
+    <meta name="description"
+        content="Complete Class 12 Biology NCERT CBSE syllabus with all 16 chapters across 5 units. Study reproduction, genetics, evolution, biotechnology, and ecology.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0f1e;
+            --bg2: #0d1528;
+            --card: #111827;
+            --card2: #1a2236;
+            --border: rgba(255, 255, 255, 0.08);
+            --green: #22c55e;
+            --green2: #16a34a;
+            --teal: #06b6d4;
+            --purple: #a855f7;
+            --yellow: #eab308;
+            --pink: #ec4899;
+            --text: #f1f5f9;
+            --muted: #94a3b8;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(10, 15, 30, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #22c55e, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .9rem;
+            font-weight: 500;
+            transition: .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        #search-bar {
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--text);
+            font-size: .85rem;
+            width: 200px;
+            outline: none;
+            transition: .3s;
+        }
+
+        #search-bar:focus {
+            border-color: var(--green);
+            width: 260px;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 5% 60px;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34, 197, 94, .15) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(6, 182, 212, .1) 0%, transparent 70%), var(--bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dna-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: .04;
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(34, 197, 94, .1);
+            border: 1px solid rgba(34, 197, 94, .3);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: .8rem;
+            color: var(--green);
+            margin-bottom: 24px;
+            animation: fadeUp .8s ease both;
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 40%, #22c55e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeUp .9s ease .1s both;
+        }
+
+        .hero p {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            animation: fadeUp 1s ease .2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 40px;
+            animation: fadeUp 1s ease .3s both;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .stat span {
+            font-size: .85rem;
+            color: var(--muted);
+        }
+
+        .scroll-btn {
+            margin-top: 48px;
+            padding: 14px 36px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--green), var(--teal));
+            border: none;
+            color: #0a0f1e;
+            cursor: pointer;
+            transition: .3s;
+            animation: fadeUp 1s ease .4s both;
+        }
+
+        .scroll-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(34, 197, 94, .4);
+        }
+
+        /* UNITS SECTION */
+        .section {
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fff, var(--muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title p {
+            color: var(--muted);
+            margin-top: 10px;
+        }
+
+        /* UNIT BLOCK */
+        .unit-block {
+            margin-bottom: 72px;
+        }
+
+        .unit-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding: 20px 28px;
+            border-radius: var(--radius);
+            background: var(--card2);
+            border: 1px solid var(--border);
+        }
+
+        .unit-icon {
+            font-size: 2rem;
+        }
+
+        .unit-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .unit-header span {
+            font-size: .85rem;
+            color: var(--muted);
+            margin-top: 2px;
+            display: block;
+        }
+
+        .unit-tag {
+            margin-left: auto;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+
+        /* CHAPTER CARDS GRID */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            cursor: pointer;
+            transition: .3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent, var(--green));
+            transition: .3s;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, .15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+            background: var(--card2);
+        }
+
+        .chapter-card:hover::before {
+            height: 4px;
+        }
+
+        .ch-num {
+            font-size: .75rem;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .ch-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 8px 0 14px;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        .ch-topics {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ch-topics li {
+            font-size: .8rem;
+            color: var(--muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.4;
+        }
+
+        .ch-topics li::before {
+            content: '▸';
+            color: var(--accent, var(--green));
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .ch-expand {
+            margin-top: 16px;
+            font-size: .8rem;
+            color: var(--accent, var(--green));
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .ch-more {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .ch-more.open {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* QUICK REFERENCE */
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .qr-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: .3s;
+        }
+
+        .qr-card:hover {
+            border-color: rgba(34, 197, 94, .3);
+            transform: translateY(-3px);
+        }
+
+        .qr-card h4 {
+            font-size: .95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--green);
+        }
+
+        .qr-card p {
+            font-size: .82rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: .7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+
+            #search-bar {
+                width: 160px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">🧬 BioNCERT XII</div>
+        <ul class="nav-links">
+            <li><a href="#reproduction">Reproduction</a></li>
+            <li><a href="#genetics">Genetics</a></li>
+            <li><a href="#welfare">Human Welfare</a></li>
+            <li><a href="#biotech">Biotechnology</a></li>
+            <li><a href="#ecology">Ecology</a></li>
+        </ul>
+        <input id="search-bar" type="text" placeholder="🔍 Search chapters…" oninput="searchChapters(this.value)">
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <svg class="dna-bg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+            <path d="M400 50 Q500 200 400 350 Q300 500 400 650 Q500 800 400 950" stroke="#22c55e" stroke-width="2"
+                fill="none" />
+            <path d="M400 50 Q300 200 400 350 Q500 500 400 650 Q300 800 400 950" stroke="#06b6d4" stroke-width="2"
+                fill="none" />
+        </svg>
+        <div class="badge">📚 CBSE Board 2025–26 &nbsp;|&nbsp; NCERT Based</div>
+        <h1>Class 12 Biology</h1>
+        <p>Complete NCERT syllabus with all chapters, key topics, and important concepts — your ultimate Biology
+            companion.</p>
+        <div class="hero-stats">
+            <div class="stat"><strong>5</strong><span>Units</span></div>
+            <div class="stat"><strong>16</strong><span>Chapters</span></div>
+            <div class="stat"><strong>100+</strong><span>Key Topics</span></div>
+            <div class="stat"><strong>70</strong><span>Marks Theory</span></div>
+        </div>
+        <button class="scroll-btn"
+            onclick="document.getElementById('chapters').scrollIntoView({behavior:'smooth'})">Explore Chapters
+            ↓</button>
+    </section>
+
+    <!-- CHAPTERS -->
+    <section class="section" id="chapters">
+        <div class="section-title">
+            <h2>All Units &amp; Chapters</h2>
+            <p>CBSE Class 12 Biology — NCERT Textbook Based</p>
+        </div>
+        <div id="chapters-container"></div>
+    </section>
+
+    <!-- QUICK REFERENCE -->
+    <section class="section" style="background:var(--bg2);">
+        <div class="section-title">
+            <h2>📌 Quick Reference</h2>
+            <p>Important terms &amp; concepts</p>
+        </div>
+        <div class="qr-grid">
+            <div class="qr-card">
+                <h4>Mendelian Laws</h4>
+                <p>Law of Dominance, Law of Segregation, Law of Independent Assortment — basis of inheritance patterns.
+                </p>
+            </div>
+            <div class="qr-card">
+                <h4>Central Dogma</h4>
+                <p>DNA → RNA → Protein. Replication, Transcription, and Translation are the core processes.</p>
+            </div>
+            <div class="qr-card">
+                <h4>Darwinian Fitness</h4>
+                <p>Survival of the fittest — organisms best adapted to environment have higher reproductive success.</p>
+            </div>
+            <div class="qr-card">
+                <h4>Recombinant DNA</h4>
+                <p>Combining DNA from two different sources using restriction enzymes and ligases to create GMOs.</p>
+            </div>
+            <div class="qr-card">
+                <h4>Ecological Pyramid</h4>
+                <p>Graphical representation of number, biomass, or energy at each trophic level in a food chain.</p>
+            </div>
+            <div class="qr-card">
+                <h4>Biodiversity Hotspots</h4>
+                <p>Regions with exceptionally high species diversity and endemism, facing significant habitat loss
+                    threats.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>🌿 Class 12 Biology — NCERT CBSE Syllabus | Study Resource</p>
+        <p style="margin-top:8px;">All content based on NCERT Class 12 Biology Textbook</p>
+    </footer>
+
+    <script>
+        const units = [
+            {
+                id: 'reproduction', icon: '🌸', title: 'Unit VI: Reproduction', tag: 'Chapters 1–4',
+                tagColor: 'rgba(34,197,94,.15)', tagText: '#22c55e', accent: '#22c55e',
+                chapters: [
+                    {
+                        num: 'Chapter 1', title: 'Reproduction in Organisms',
+                        topics: ['Modes of reproduction: Asexual & Sexual', 'Asexual: Binary fission, Budding, Fragmentation', 'Vegetative propagation in plants', 'Sporogenesis, Parthenogenesis'],
+                        more: ['Life span of organisms', 'Events in sexual reproduction', 'Significance of reproduction']
+                    },
+                    {
+                        num: 'Chapter 2', title: 'Sexual Reproduction in Flowering Plants',
+                        topics: ['Structure of flower: Stamen & Pistil', 'Microsporogenesis & Megasporogenesis', 'Pollination: Self & Cross pollination', 'Fertilisation & Double fertilisation'],
+                        more: ['Pollen-Pistil interaction', 'Post-fertilisation events', 'Apomixis & Polyembryony', 'Seed and fruit development']
+                    },
+                    {
+                        num: 'Chapter 3', title: 'Human Reproduction',
+                        topics: ['Male reproductive system: Testes, accessory glands', 'Female reproductive system: Ovary, Uterus', 'Gametogenesis: Spermatogenesis & Oogenesis', 'Menstrual cycle'],
+                        more: ['Fertilisation and implantation', 'Embryonic development: Morula, Blastula', 'Parturition and Lactation', 'Placenta formation']
+                    },
+                    {
+                        num: 'Chapter 4', title: 'Reproductive Health',
+                        topics: ['Reproductive health: problems & strategies', 'Population explosion & birth control', 'Contraceptive methods: Barrier, Oral, IUDs', 'Medical Termination of Pregnancy (MTP)'],
+                        more: ['Sexually Transmitted Infections (STIs)', 'Infertility & Assisted Reproductive Technologies', 'IVF, ZIFT, GIFT, ICSI', 'Amniocentesis']
+                    }
+                ]
+            },
+            {
+                id: 'genetics', icon: '🧬', title: 'Unit VII: Genetics and Evolution', tag: 'Chapters 5–7',
+                tagColor: 'rgba(168,85,247,.15)', tagText: '#a855f7', accent: '#a855f7',
+                chapters: [
+                    {
+                        num: 'Chapter 5', title: 'Principles of Inheritance and Variation',
+                        topics: ['Mendel\'s Laws of Inheritance', 'Monohybrid & Dihybrid Cross', 'Incomplete dominance, Co-dominance', 'Multiple alleles: ABO blood grouping'],
+                        more: ['Chromosomal theory of inheritance', 'Sex determination: XY, ZW types', 'Linkage & Recombination', 'Mutation, Chromosomal disorders: Down\'s syndrome, Turner\'s']
+                    },
+                    {
+                        num: 'Chapter 6', title: 'Molecular Basis of Inheritance',
+                        topics: ['DNA structure: Double helix model', 'DNA replication: Semi-conservative', 'Transcription: Template strand, RNA types', 'Translation: Genetic code, Ribosomes'],
+                        more: ['Human Genome Project (HGP)', 'DNA fingerprinting', 'Lac Operon model', 'Regulation of gene expression']
+                    },
+                    {
+                        num: 'Chapter 7', title: 'Evolution',
+                        topics: ['Origin of life: Big Bang, Chemical evolution', 'Theories: Lamarckism & Darwinism', 'Evidences of evolution: Fossils, Homology', 'Natural Selection & Types'],
+                        more: ['Hardy-Weinberg Principle', 'Speciation: Allopatric & Sympatric', 'Adaptive radiation', 'Mechanism of evolution: Genetic drift, Gene flow', 'Brief account of human evolution']
+                    }
+                ]
+            },
+            {
+                id: 'welfare', icon: '🏥', title: 'Unit VIII: Biology in Human Welfare', tag: 'Chapters 8–10',
+                tagColor: 'rgba(234,179,8,.15)', tagText: '#eab308', accent: '#eab308',
+                chapters: [
+                    {
+                        num: 'Chapter 8', title: 'Human Health and Disease',
+                        topics: ['Health & Disease: Pathogens types', 'Common diseases: Typhoid, Pneumonia, Malaria', 'Immune system: Innate & Acquired immunity', 'Vaccination & Immunisation'],
+                        more: ['AIDS: HIV structure, transmission', 'Cancer: Carcinogens, Metastasis', 'Drugs & Alcohol abuse', 'Adolescent health problems']
+                    },
+                    {
+                        num: 'Chapter 9', title: 'Strategies for Enhancement in Food Production',
+                        topics: ['Animal husbandry: Dairy & Poultry management', 'Plant breeding: Steps & objectives', 'Biofortification examples', 'Tissue culture & Somatic hybridisation'],
+                        more: ['Mutation breeding', 'Single Cell Protein (SCP)', 'Green Revolution: Norman Borlaug', 'Fisheries & Apiculture']
+                    },
+                    {
+                        num: 'Chapter 10', title: 'Microbes in Human Welfare',
+                        topics: ['Microbes in household: Curd, Bread, Cheese', 'Industrial products: Antibiotics, Vitamins', 'Sewage treatment: Primary & Secondary', 'Microbes as biocontrol agents'],
+                        more: ['Biogas production: Methanogens', 'Biofertilisers: Rhizobium, Azolla', 'Bioremediation', 'Cyclosporin A, Statins — uses']
+                    }
+                ]
+            },
+            {
+                id: 'biotech', icon: '🔬', title: 'Unit IX: Biotechnology', tag: 'Chapters 11–12',
+                tagColor: 'rgba(6,182,212,.15)', tagText: '#06b6d4', accent: '#06b6d4',
+                chapters: [
+                    {
+                        num: 'Chapter 11', title: 'Biotechnology: Principles and Processes',
+                        topics: ['Recombinant DNA technology: Steps', 'Restriction Endonucleases: EcoRI, BamHI', 'Cloning vectors: Plasmids, Bacteriophages', 'PCR: Polymerase Chain Reaction'],
+                        more: ['Gel Electrophoresis', 'Competent host cells', 'Bioreactors: Batch & Continuous', 'Downstream processing']
+                    },
+                    {
+                        num: 'Chapter 12', title: 'Biotechnology and its Applications',
+                        topics: ['Transgenic organisms: Bt cotton, Golden rice', 'Genetically Modified Organisms (GMOs)', 'Gene therapy: ADA deficiency', 'Molecular diagnostics: ELISA, PCR'],
+                        more: ['Insulin production: Eli Lilly', 'Bioethics and biosafety', 'Biopiracy issues', 'GEAC — regulatory body in India']
+                    }
+                ]
+            },
+            {
+                id: 'ecology', icon: '🌍', title: 'Unit X: Ecology', tag: 'Chapters 13–16',
+                tagColor: 'rgba(236,72,153,.15)', tagText: '#ec4899', accent: '#ec4899',
+                chapters: [
+                    {
+                        num: 'Chapter 13', title: 'Organisms and Populations',
+                        topics: ['Ecology: Levels of organisation', 'Abiotic factors: Temperature, Water, Light', 'Population attributes: Natality, Mortality', 'Population growth: Exponential & Logistic'],
+                        more: ['Population interactions: Mutualism, Competition', 'Predation, Parasitism, Commensalism', 'Amensalism', 'Adaptations: Thermoregulation, Osmosis']
+                    },
+                    {
+                        num: 'Chapter 14', title: 'Ecosystem',
+                        topics: ['Ecosystem: Structure & Function', 'Food chains & Food webs', 'Productivity: Primary & Secondary', 'Energy flow: 10% Law — Lindeman'],
+                        more: ['Decomposition process', 'Ecological pyramids: Number, Biomass, Energy', 'Nutrient cycling: Carbon, Phosphorus', 'Ecosystem services & Stability']
+                    },
+                    {
+                        num: 'Chapter 15', title: 'Biodiversity and Conservation',
+                        topics: ['Levels: Genetic, Species, Ecosystem diversity', 'Global biodiversity patterns', 'Causes of biodiversity loss: HIPPO', 'In-situ conservation: National parks, Biosphere reserves'],
+                        more: ['Ex-situ conservation: Seed banks, Zoos', 'Convention on Biological Diversity (CBD)', 'Hotspots of biodiversity', 'Sacred groves']
+                    },
+                    {
+                        num: 'Chapter 16', title: 'Environmental Issues',
+                        topics: ['Air pollution: Causes, Effects & Control', 'Water pollution: Eutrophication, BOD', 'Soil pollution & Solid waste management', 'Radioactive waste management'],
+                        more: ['Greenhouse effect & Global warming', 'Ozone depletion: CFC, Montreal Protocol', 'Noise pollution', 'Case study: Integrated Watershed Management']
+                    }
+                ]
+            }
+        ];
+
+        function buildChapters(data) {
+            const container = document.getElementById('chapters-container');
+            container.innerHTML = '';
+            data.forEach(unit => {
+                const block = document.createElement('div');
+                block.className = 'unit-block reveal';
+                block.id = unit.id;
+                block.innerHTML = `
+      <div class="unit-header">
+        <span class="unit-icon">${unit.icon}</span>
+        <div>
+          <h3>${unit.title}</h3>
+          <span>${unit.chapters.length} Chapters</span>
+        </div>
+        <span class="unit-tag" style="background:${unit.tagColor};color:${unit.tagText}">${unit.tag}</span>
+      </div>
+      <div class="chapters-grid">
+        ${unit.chapters.map((ch, i) => `
+          <div class="chapter-card" style="--accent:${unit.accent}" data-ch="${ch.title.toLowerCase()}">
+            <div class="ch-num">${ch.num}</div>
+            <div class="ch-title">${ch.title}</div>
+            <ul class="ch-topics">
+              ${ch.topics.map(t => `<li>${t}</li>`).join('')}
+            </ul>
+            ${ch.more && ch.more.length ? `
+              <div class="ch-expand" onclick="toggleMore(this)">+ More Topics</div>
+              <ul class="ch-topics ch-more">
+                ${ch.more.map(t => `<li>${t}</li>`).join('')}
+              </ul>
+            ` : ''}
+          </div>
+        `).join('')}
+      </div>`;
+                container.appendChild(block);
+            });
+            observeReveal();
+        }
+
+        function toggleMore(el) {
+            const more = el.nextElementSibling;
+            more.classList.toggle('open');
+            el.textContent = more.classList.contains('open') ? '− Hide Topics' : '+ More Topics';
+        }
+
+        function searchChapters(query) {
+            if (!query.trim()) { buildChapters(units); return; }
+            const q = query.toLowerCase();
+            const filtered = units.map(u => ({
+                ...u,
+                chapters: u.chapters.filter(ch =>
+                    ch.title.toLowerCase().includes(q) ||
+                    ch.num.toLowerCase().includes(q) ||
+                    ch.topics.some(t => t.toLowerCase().includes(q)) ||
+                    (ch.more && ch.more.some(t => t.toLowerCase().includes(q)))
+                )
+            })).filter(u => u.chapters.length > 0);
+            buildChapters(filtered.length ? filtered : units);
+        }
+
+        function observeReveal() {
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
+
+        buildChapters(units);
+    </script>
+</body>
+
+</html>
